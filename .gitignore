@@ -1,3 +1,14 @@
+.metadata
+.recommenders
+RemoteSystemsTempFiles
+Servers
+
+grocerylist-core/.settings
+grocerylist-core/target
+grocerylist-core/.classpath
+grocerylist-core/.project
+grocerylist-core/src/test
+
 *.class
 
 # Mobile Tools for Java (J2ME)
