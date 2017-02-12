@@ -9,6 +9,12 @@ grocerylist-core/.classpath
 grocerylist-core/.project
 grocerylist-core/src/test
 
+grocerylist-cli/.vscode
+grocerylist-cli/dist
+grocerylist-cli/node_modules
+grocerylist-cli/src/assets
+
+
 *.class
 
 # Mobile Tools for Java (J2ME)
