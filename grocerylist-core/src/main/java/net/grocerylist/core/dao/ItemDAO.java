@@ -40,4 +40,9 @@ public class ItemDAO extends GenericDAO<Item, Long> {
 		return (List<Item>) super.listByNamedQuery("SelectedItem.listAvailableItems", paramValueMap, Item.class);
 	}
 	
+	@Transactional
+	public void delete(final Long id) throws SystemException {
+		super.delete(Item.class, id);
+	}
+	
 }

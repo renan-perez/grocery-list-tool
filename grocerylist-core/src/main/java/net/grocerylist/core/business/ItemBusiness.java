@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import net.grocerylist.core.dao.ItemDAO;
 import net.grocerylist.core.exception.SystemException;
@@ -13,10 +14,6 @@ import net.grocerylist.core.model.Item;
 public class ItemBusiness {
 	
 	@Autowired private ItemDAO itemDAO;
-	
-	public Item save(final Item item) throws SystemException {
-		return itemDAO.save(item);
-	}
 	
 	public Item getItemById(final Long id) throws SystemException {
 		return itemDAO.get(id);
@@ -30,8 +27,12 @@ public class ItemBusiness {
 		return itemDAO.listItemsAvailable(groceryListId);
 	}
 	
-	public void updateItem(final Item item) throws SystemException {
-		itemDAO.update(item);
+	public Item saveOrUpdateItem(final Item item) throws SystemException {
+		return item.getId() == null ? itemDAO.save(item) : itemDAO.update(item);
+	}
+
+	public void deleteItem(final Long id) throws SystemException {
+		itemDAO.delete(id);
 	}
 	
 }

@@ -31,7 +31,7 @@ public class GroceryListBusiness {
 		return groceryList;
 	}
 	
-	public GroceryList saveGroceryList(final GroceryList groceryList) throws SystemException {
+	public GroceryList saveOrUpdateGroceryList(final GroceryList groceryList) throws SystemException {
 		GroceryList groceryListSaved = groceryListDAO.saveOrUpdate(groceryList);
 		if (Objects.nonNull(groceryList.getSelectedItems())) {
 			groceryList.getSelectedItems().forEach(si -> si.getId().setGroceryList(groceryListSaved));

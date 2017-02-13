@@ -1,45 +1,69 @@
-<div *ngIf="itemDetailed == null">
-  <h4>ITEMS</h4>
+<section class="main-section">
+  <div *ngIf="itemDetailed == null">
+    <h4>ITEMS</h4>
 
-  <div class="list-group col-xs-4">
-    <div  *ngFor="let item of items" class="list-group-item">
-      <span class="col-xs-9">{{ item?.name }}</span>
-      <a (click)="detailItem(item)" class="btn fa fa-eye"></a>
-      <a href="javascript:void(0);" class="btn fa fa-times"></a>
+    <div class="list-group col-xs-13">
+      <div  *ngFor="let item of items" class="list-group-item">
+        <span class="col-xs-10">{{ item?.name }}</span>
+        <a (click)="detailItem(item)" class="btn fa fa-eye"></a>
+      </div>
+    </div>
+    <div class="list-group col-xs-13">
+      <button class="btn btn-primary btn-sm" (click)="newItemStatusUpdate(true)">Add New Item</button>
     </div>
   </div>
-  <div class="list-group col-xs-12">
-    <button class="btn btn-primary btn-sm">Add New Item</button>
-  </div>
-</div>
 
-<div *ngIf="itemDetailed != null">
-  <h4>ITEM DETAILS</h4>
-  <div class="list-group col-xs-4">
-    <div class="panel panel-default">
-      <div class="panel-body">
+  <div *ngIf="itemDetailed != null || newItemStatus">
+    <h4>ITEM DETAILS</h4>
+    <div class="list-group col-xs-13">
+      <div class="panel panel-default">
+        <div class="panel-body">
 
-        <div class="form-group">
-          <span class="control-label"><strong>Title</strong></span>
-          <div>
-            <span *ngIf="!updateActive">{{ itemDetailed.name }}</span>
-            <input *ngIf="updateActive" [(ngModel)]="itemDetailed.name" class="form-control input-sm">
+          <div class="form-group">
+            <span class="control-label"><strong>Title</strong></span>
+            <div>
+              <span *ngIf="!updateActive">{{ itemDetailed.name }}</span>
+              <input *ngIf="updateActive || newItemStatus" [(ngModel)]="itemDetailed.name" class="form-control input-sm">
+            </div>
           </div>
-        </div>
-        <div class="form-group">
-          <span class="control-label"><strong>Notes</strong></span>
-          <div>
-            <span *ngIf="!updateActive">{{ itemDetailed.notes }}</span>
-            <input *ngIf="updateActive" [(ngModel)]="itemDetailed.notes" class="form-control input-sm">
+          <div class="form-group">
+            <span class="control-label"><strong>Notes</strong></span>
+            <div>
+              <span *ngIf="!updateActive">{{ itemDetailed.notes }}</span>
+              <input *ngIf="updateActive || newItemStatus" [(ngModel)]="itemDetailed.notes" class="form-control input-sm">
+            </div>
           </div>
-        </div>
 
-        <div class="margin-top-20">
-          <button (click)="cancelUpdate()" class="btn btn-primary btn-sm" *ngIf="!updateActive">Back</button>
-          <button (click)="updateStatus(true)" class="btn btn-primary btn-sm" *ngIf="!updateActive">Update</button>
-          <button (click)="updateItem(itemDetailed)" class="btn btn-primary btn-sm" *ngIf="updateActive">Save</button>
-          <button (click)="updateStatus(false)" class="btn btn-primary btn-sm" *ngIf="updateActive">Cancel</button>
+          <div class="margin-top-20">
+            <button (click)="cancelSaveOrUpdate()" class="btn btn-primary btn-sm" *ngIf="!updateActive || newItemStatus">Back</button>
+            <button (click)="updateStatus(true)" class="btn btn-primary btn-sm" *ngIf="!newItemStatus && !updateActive">Update</button>
+            <button (click)="saveOrupdateItem(itemDetailed)" class="btn btn-primary btn-sm" *ngIf="updateActive || newItemStatus">Save</button>
+            <button (click)="updateStatus(false)" class="btn btn-primary btn-sm" *ngIf="updateActive && !newItemStatus">Cancel</button>
+          </div>
         </div>
       </div>
     </div>
+  </div>
+</section>
+
+<!-- Confirmation Item -->
+<div id="modal-remove-item" class="modal fade" role="dialog">
+  <div class="modal-dialog">
+
+    <!-- Modal content-->
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title">Remove Item</h4>
+      </div>
+      <div class="modal-body">
+        <p>Are you sure?</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal" (click)="deleteItem()">Yes</button>
+        <button type="button" class="btn btn-default" data-dismiss="modal">No</button>
+      </div>
+    </div>
+
+  </div>
 </div>

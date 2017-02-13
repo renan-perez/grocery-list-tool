@@ -44,7 +44,7 @@ public class GroceryListController {
 	@RequestMapping(value = "/saveGroceryList", method = RequestMethod.POST)
 	public Boolean saveGroceryList(@RequestBody GroceryList groceryList) {
 		try {
-			groceryListBusiness.saveGroceryList(groceryList);
+			groceryListBusiness.saveOrUpdateGroceryList(groceryList);
 			return true;
 		} catch (SystemException e) {
 			e.printStackTrace();
@@ -55,7 +55,7 @@ public class GroceryListController {
 	@RequestMapping(value = "/newGroceryList", method = RequestMethod.GET)
 	public GroceryList newGroceryList() {
 		try {
-			return groceryListBusiness.saveGroceryList(new GroceryList());
+			return groceryListBusiness.saveOrUpdateGroceryList(new GroceryList("New List"));
 		} catch (SystemException e) {
 			e.printStackTrace();
 			return null;

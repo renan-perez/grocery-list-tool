@@ -14,9 +14,11 @@ export class ItemsComponent implements OnInit {
   items: Item[];
   itemDetailed: Item;
   itemDetailedBackup: Item;
+  itemSelectedToDelete: Item;
   updateActive: Boolean;
   itemId: Number;
   groceryListId: Number;
+  newItemStatus: Boolean;
 
   constructor(
     private router: Router,
@@ -26,6 +28,7 @@ export class ItemsComponent implements OnInit {
 
   ngOnInit() {
     this.itemDetailed = null;
+    this.newItemStatus = false;
 
     this.route.params.subscribe((param: any) => {
             this.itemId = param['itemId'];
@@ -57,27 +60,29 @@ export class ItemsComponent implements OnInit {
         );
   }
 
-  updateItem(item: Item) {
-    this.itemService.updateItem(item)
+  saveOrupdateItem(item: Item) {
+    this.itemService.saveOrupdateItem(item)
         .subscribe(
-          (success: Boolean) => this.updateActive = !success,
+          (success: Boolean) => null,
           err => console.log(err),
-          () => this.posUpdate(item)
+          () => this.posSaveOrUpdate(item)
         );
   }
 
-  cancelUpdate() {
+  cancelSaveOrUpdate() {
     if (this.groceryListId != undefined) {
       this.router.navigate([`/grocerylist/${this.groceryListId}`], { skipLocationChange: true });
     }
     this.itemDetailed = null;
+    this.newItemStatus = false;
+    this.updateActive = false;
   }
 
-  posUpdate(item: Item) {
-    if (!this.updateActive) {
-      this.listItems();
+  posSaveOrUpdate(item: Item) {
+      this.updateActive = false;
+      this.newItemStatus = false;
       this.itemDetailed = item;
-    }
+      this.listItems();
   }
 
   detailItem(item: Item) {
@@ -93,6 +98,24 @@ export class ItemsComponent implements OnInit {
       this.itemDetailed.name = this.itemDetailedBackup.name;
       this.itemDetailed.notes = this.itemDetailedBackup.notes;
     } 
+  }
+
+  newItemStatusUpdate(status: Boolean) {
+    this.newItemStatus = status;
+    this.itemDetailed = new Item(null);
+  }
+
+  selectItemToDelete(item: Item) {
+    this.itemSelectedToDelete = item;
+  }
+
+  deleteItem() {
+    this.itemService.deleteItem(this.itemSelectedToDelete.id)
+      .subscribe(
+        (success: Boolean) => null,
+        err => console.log(err),
+        () => this.listItems()
+      );
   }
 
 }

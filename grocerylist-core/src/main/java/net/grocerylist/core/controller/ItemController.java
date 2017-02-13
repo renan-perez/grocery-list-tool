@@ -49,10 +49,10 @@ public class ItemController {
 		}
 	}
 	
-	@RequestMapping(value = "/updateItem", method = RequestMethod.POST)
-	public Boolean update(@RequestBody Item item) {
+	@RequestMapping(value = "/saveOrUpdateItem", method = RequestMethod.POST)
+	public Boolean saveOrUpdate(@RequestBody Item item) {
 		try {
-			itemBusiness.updateItem(item);
+			itemBusiness.saveOrUpdateItem(item);
 			return true;
 		} catch (SystemException e) {
 			e.printStackTrace();
@@ -60,13 +60,14 @@ public class ItemController {
 		}
 	}
 	
-	@RequestMapping(value = "/saveItem", method = RequestMethod.POST)
-	public Item saveItem(@RequestBody Item item) {
+	@RequestMapping(value = "/deleteItem/{itemId}", method = RequestMethod.POST)
+	public Boolean deleteItem(@PathVariable Long itemId) {
 		try {
-			return itemBusiness.save(item);
+			itemBusiness.deleteItem(itemId);
+			return true;
 		} catch (SystemException e) {
 			e.printStackTrace();
-			return null;
+			return false;
 		}
 	}
 	

@@ -1,47 +1,58 @@
-<div *ngIf="groceryListDetailed == null && groceryListId == null">
-  <h4>LISTS</h4>
-  <div class="list-group col-xs-4">
-    <div  *ngFor="let list of groceryLists" class="list-group-item">
-        <span class="col-xs-9">Grocery list {{ list.id }}</span>
+<section class="main-section">
+  <div *ngIf="groceryListDetailed == null && groceryListId == null">
+    <h4>LISTS</h4>
+    <div class="list-group col-xs-13">
+      <div  *ngFor="let list of groceryLists" class="list-group-item">
+        <span class="col-xs-9">{{ list.name }}</span>
         <a (click)="detailGroceryList(list.id)" class="btn fa fa-eye"></a>
-    <a href="javascript:void(0);" class="btn fa fa-times" (click)="deleteGroceryList(list.id)"></a>
+        <a href="javascript:void(0);" class="btn fa fa-times" 
+            data-toggle="modal" data-target="#modal-remove-list" 
+            (click)="selectGroceryListToRemove(list)"></a>
+      </div>
+    </div>
+    <div class="list-group col-xs-12">
+      <button class="btn btn-primary btn-sm" (click)="newGroceryList()">Add New List</button>
     </div>
     
   </div>
-  <div class="list-group col-xs-12">
-    <button class="btn btn-primary btn-sm" (click)="newGroceryList()">Add New List</button>
-  </div>
-</div>
 
-<div *ngIf="groceryListDetailed != null">
-  <h4>LIST DETAILS</h4>
-  <div class="list-group col-xs-4">
-    <div class="list-group-item list-group-item-info">
-      <strong>Grocery List {{ groceryListDetailed.id }}</strong>
-    </div>
-    <div *ngFor="let selectedItem of groceryListDetailed.selectedItems" class="list-group-item" [class.list-group-item-warning]="selectedItem.purchase == true">
-      <div class="checkbox col-xs-9">
-        <label>
-          <input type="checkbox" [(ngModel)]="selectedItem.purchase" (click)="updatePurchaseStatus(selectedItem)">
-          {{ selectedItem.id.item.name }}
-        </label>
+  <div *ngIf="groceryListDetailed != null">
+    <h4>LIST DETAILS</h4>
+    <div class="list-group col-xs-13">
+      <div class="list-group-item list-group-item-info">
+        <a href="javascript:void(0);" (click)="changeUpdateStatus(true)">
+          <strong>{{ groceryListDetailed.name }}</strong>
+        </a><br>
+        <div *ngIf="updateStatus">
+          <input type="text" [(ngModel)]="groceryListDetailed.name">
+          <button class="btn btn-primary btn-xs" (click)="updateListName()">Update</button>
+        </div>
       </div>
-      <a routerLink="/items/{{ selectedItem.id.item.id }}/{{ selectedItem.id.groceryList.id }}" 
-          class="btn fa fa-eye" skipLocationChange></a>
-      <a href="javascript:void(0);" class="btn fa fa-times" 
-          data-toggle="modal" data-target="#modal-remove" (click)="selectItemToRemove(selectedItem.id)"></a>
+      <div *ngFor="let selectedItem of groceryListDetailed.selectedItems" class="list-group-item" [class.list-group-item-warning]="selectedItem.purchase == true">
+        <div class="checkbox col-xs-9">
+          <label>
+            <input type="checkbox" [(ngModel)]="selectedItem.purchase" (click)="updatePurchaseStatus(selectedItem)">
+            {{ selectedItem.id.item.name }}
+          </label>
+        </div>
+        <a routerLink="/items/{{ selectedItem.id.item.id }}/{{ selectedItem.id.groceryList.id }}" 
+            class="btn fa fa-eye" skipLocationChange></a>
+        <a href="javascript:void(0);" class="btn fa fa-times" 
+            data-toggle="modal" data-target="#modal-remove" 
+            (click)="selectItemToRemove(selectedItem.id)"></a>
+      </div>
+      <span class="list-group-item">
+        <a href="javascript:void(0);" class="btn" data-toggle="modal" data-target="#myModal" (click)="listAvailableItems()">
+          <i class="fa fa-plus" aria-hidden="true"></i> ADD ITEM</a>
+      </span>
     </div>
-    <span class="list-group-item">
-      <a href="javascript:void(0);" class="btn" data-toggle="modal" data-target="#myModal" (click)="listAvailableItems()">
-        <i class="fa fa-plus" aria-hidden="true"></i> ADD ITEM</a>
-    </span>
+    <div class="list-group col-xs-9">
+      <button (click)="backToLists()" class="btn btn-primary btn-sm">Back</button>
+    </div>
   </div>
-  <div class="list-group col-xs-9">
-    <button (click)="backToLists()" class="btn btn-primary btn-sm">Back</button>
-  </div>
-</div>
+</section>
 
-<!-- Confirmation -->
+<!-- Confirmation Item -->
 <div id="modal-remove" class="modal fade" role="dialog">
   <div class="modal-dialog">
 
@@ -56,6 +67,28 @@
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-default" data-dismiss="modal" (click)="removeItemFromList()">Yes</button>
+        <button type="button" class="btn btn-default" data-dismiss="modal">No</button>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- Confirmation List -->
+<div id="modal-remove-list" class="modal fade" role="dialog">
+  <div class="modal-dialog">
+
+    <!-- Modal content-->
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title">Remove List</h4>
+      </div>
+      <div class="modal-body">
+        <p>Are you sure?</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal" (click)="deleteGroceryList()">Yes</button>
         <button type="button" class="btn btn-default" data-dismiss="modal">No</button>
       </div>
     </div>

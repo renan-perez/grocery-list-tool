@@ -22,6 +22,8 @@ export class GroceryListComponent implements OnInit {
   success: Boolean;
   selectedItemIdToRemove: SelectedItemId;
   availableItems: Item[];
+  updateStatus: Boolean;
+  selectedListToRemove: GroceryList;
 
   constructor(
     private route: ActivatedRoute,
@@ -54,7 +56,6 @@ export class GroceryListComponent implements OnInit {
         .subscribe(
           (groceryList: GroceryList) => this.groceryListDetailed = groceryList,
           err => console.log(err),
-          () => console.log(JSON.stringify(this.groceryListDetailed.selectedItems))
         );
   }
 
@@ -98,7 +99,6 @@ export class GroceryListComponent implements OnInit {
         let selectecItem: SelectedItem = new SelectedItem();
         selectecItem.id = selectedItemId;
         selectecItem.purchase = null;
-        console.log(1);console.log(2);
         selectedItems.push(selectecItem);
       }
     });
@@ -133,14 +133,33 @@ export class GroceryListComponent implements OnInit {
 
     backToLists() {
       this.groceryListDetailed = null;
+      this.getAllLists();
     }
 
-    deleteGroceryList(groceryListId: Number) {
-      this.groceryListService.deleteGroceryList(groceryListId)
+    selectGroceryListToRemove(selectedListToRemove: GroceryList) {
+      this.selectedListToRemove = selectedListToRemove;
+    }
+
+    deleteGroceryList() {
+      this.groceryListService.deleteGroceryList(this.selectedListToRemove.id)
         .subscribe(
-          (success: Boolean) => this.getAllLists(),
+          (success: Boolean) => null,
           err => console.log(err),
+          () => this.getAllLists()
         );
+    }
+
+    updateListName() {
+      this.groceryListService.saveGroceryList(this.groceryListDetailed)
+        .subscribe(
+          (success: Boolean) => null,
+          err => console.log(err)
+        );
+      this.changeUpdateStatus(false);
+    }
+
+    changeUpdateStatus(status: Boolean) {
+      this.updateStatus = status;
     }
 
 }

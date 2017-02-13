@@ -11,14 +11,15 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter
 
 import net.grocerylist.core.business.GroceryListBusiness;
 import net.grocerylist.core.business.ItemBusiness;
-import net.grocerylist.core.controller.HomeController;
+import net.grocerylist.core.controller.GroceryListController;
+import net.grocerylist.core.controller.ItemController;
 import net.grocerylist.core.dao.GroceryListDAO;
 import net.grocerylist.core.dao.ItemDAO;
 import net.grocerylist.core.dao.SelectedItemDAO;
 
 @EnableWebMvc
-@ComponentScan(basePackageClasses = {HomeController.class, GroceryListBusiness.class, ItemBusiness.class, ItemDAO.class,
-		GroceryListDAO.class, SelectedItemDAO.class})
+@ComponentScan(basePackageClasses = {GroceryListBusiness.class, ItemBusiness.class, ItemDAO.class,
+		GroceryListDAO.class, SelectedItemDAO.class, GroceryListController.class, ItemController.class})
 public class AppWebConfiguration extends WebMvcConfigurerAdapter {
 	
 	@Bean

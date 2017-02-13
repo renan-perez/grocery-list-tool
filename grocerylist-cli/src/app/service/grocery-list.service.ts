@@ -6,6 +6,7 @@ import { Item } from '../model/item';
 import { GroceryList } from '../model/grocery-list';
 import { SelectedItem } from '../model/selected-item';
 import { SelectedItemId } from '../model/selected-item-id';
+import { UrlUtil } from '../util/url-util';
 
 // Import RxJs required methods
 import 'rxjs/add/operator/catch';
@@ -14,13 +15,15 @@ import 'rxjs/add/operator/map';
 @Injectable()
 export class GroceryListService {
 
-  private allListsURL = `http://localhost:8081/grocerylist-core/groceryList/getAllLists`;
-  private getListByIdURL = `http://localhost:8081/grocerylist-core/groceryList/getGroceryListById`;
-  private removeItemFromListURL = `http://localhost:8081/grocerylist-core/groceryList/removeItemFromList`;
-  private addItemsToListURL = `http://localhost:8081/grocerylist-core/groceryList/addItemsToList`;
-  private updatePurchaseStatusURL = `http://localhost:8081/grocerylist-core/groceryList/updatePurchaseStatus`;
-  private newGroceryListURL = `http://localhost:8081/grocerylist-core/groceryList/newGroceryList`;
-  private deleteGroceryListURL = `http://localhost:8081/grocerylist-core/groceryList/deleteGroceryList`;
+  private allListsURL = `${UrlUtil.serverURL}/grocerylist-core/groceryList/getAllLists`;
+  private getListByIdURL = `${UrlUtil.serverURL}/grocerylist-core/groceryList/getGroceryListById`;
+  private removeItemFromListURL = `${UrlUtil.serverURL}/grocerylist-core/groceryList/removeItemFromList`;
+  private addItemsToListURL = `${UrlUtil.serverURL}/grocerylist-core/groceryList/addItemsToList`;
+  private updatePurchaseStatusURL = `${UrlUtil.serverURL}/grocerylist-core/groceryList/updatePurchaseStatus`;
+  private newGroceryListURL = `${UrlUtil.serverURL}/grocerylist-core/groceryList/newGroceryList`;
+  private deleteGroceryListURL = `${UrlUtil.serverURL}/grocerylist-core/groceryList/deleteGroceryList`;
+  private saveGroceryListURL = `${UrlUtil.serverURL}/grocerylist-core/groceryList/saveGroceryList`;
+  
 
   constructor(private http: Http) {}
 
@@ -90,6 +93,17 @@ export class GroceryListService {
                     method: 'POST'
                   })
                .map(response => <GroceryList>response.json())
+               .catch(this.handleError);
+  }
+
+  saveGroceryList(groceryList: GroceryList) {
+    return this.http
+              .get(this.saveGroceryListURL, { 
+                    headers: this.getHeadersPost(),
+                    body: JSON.stringify(groceryList),
+                    method: 'POST'
+                  })
+               .map(response => <Boolean>response.json())
                .catch(this.handleError);
   }
 
