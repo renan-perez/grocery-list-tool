@@ -14,6 +14,10 @@ public class ItemBusiness {
 	
 	@Autowired private ItemDAO itemDAO;
 	
+	public Item save(final Item item) throws SystemException {
+		return itemDAO.save(item);
+	}
+	
 	public Item getItemById(final Long id) throws SystemException {
 		return itemDAO.get(id);
 	}
@@ -22,7 +26,12 @@ public class ItemBusiness {
 		return itemDAO.list();
 	}
 	
+	public List<Item> listAvailableItems(final Long groceryListId) throws SystemException {
+		return itemDAO.listItemsAvailable(groceryListId);
+	}
+	
 	public void updateItem(final Item item) throws SystemException {
 		itemDAO.update(item);
 	}
+	
 }

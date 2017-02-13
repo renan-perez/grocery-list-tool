@@ -13,7 +13,7 @@ import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 
 @NamedQueries({
-    @NamedQuery(
+	@NamedQuery(
 		    name = "Item.list",
 		    query = "SELECT i " +
 		            "FROM   Item i"

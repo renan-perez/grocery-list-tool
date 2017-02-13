@@ -11,5 +11,5 @@ export class Item {
     id: Number;
 	name: String;
 	notes: String;
-    
+    selected: Boolean;
 }

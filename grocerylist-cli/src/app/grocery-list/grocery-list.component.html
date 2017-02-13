@@ -1,38 +1,69 @@
-<h3>Grocery Lists</h3>
-
-<div *ngIf="groceryListDetailed == null">
-  <button>New</button>
-  <ul *ngFor="let list of groceryLists">
-    <li>
-      <a href="javascript:void(0)" (click)="detailGroceryList(list.id)">
-        Grocery list {{ list.id }}
-      </a>
-    </li>
-  </ul>
+<div *ngIf="groceryListDetailed == null && groceryListId == null">
+  <h4>LISTS</h4>
+  <div class="list-group col-xs-4">
+    <div  *ngFor="let list of groceryLists" class="list-group-item">
+        <span class="col-xs-9">Grocery list {{ list.id }}</span>
+        <a (click)="detailGroceryList(list.id)" class="btn fa fa-eye"></a>
+    <a href="javascript:void(0);" class="btn fa fa-times" (click)="deleteGroceryList(list.id)"></a>
+    </div>
+    
+  </div>
+  <div class="list-group col-xs-12">
+    <button class="btn btn-primary btn-sm" (click)="newGroceryList()">Add New List</button>
+  </div>
 </div>
 
 <div *ngIf="groceryListDetailed != null">
-  List {{ groceryListDetailed.id }}
-  
-  <ul>
-    <li *ngFor="let selectedItem of groceryListDetailed.selectedItems">
-      
-      <input type="checkbox" [(ngModel)]="selectedItem.purchase">
-      {{ selectedItem.id.item.name }}
-      <a href="javascript:void(0)">Delete</a>
+  <h4>LIST DETAILS</h4>
+  <div class="list-group col-xs-4">
+    <div class="list-group-item list-group-item-info">
+      <strong>Grocery List {{ groceryListDetailed.id }}</strong>
+    </div>
+    <div *ngFor="let selectedItem of groceryListDetailed.selectedItems" class="list-group-item" [class.list-group-item-warning]="selectedItem.purchase == true">
+      <div class="checkbox col-xs-9">
+        <label>
+          <input type="checkbox" [(ngModel)]="selectedItem.purchase" (click)="updatePurchaseStatus(selectedItem)">
+          {{ selectedItem.id.item.name }}
+        </label>
+      </div>
       <a routerLink="/items/{{ selectedItem.id.item.id }}/{{ selectedItem.id.groceryList.id }}" 
-        routerLinkActive="active" 
-        skipLocationChange>
-        Detail
-      </a>
-    </li>
-    <li>
-      <button class="btn btn-info btn-xs" data-toggle="modal" data-target="#myModal">Add Item</button>
-    </li>
-  </ul>
+          class="btn fa fa-eye" skipLocationChange></a>
+      <a href="javascript:void(0);" class="btn fa fa-times" 
+          data-toggle="modal" data-target="#modal-remove" (click)="selectItemToRemove(selectedItem.id)"></a>
+    </div>
+    <span class="list-group-item">
+      <a href="javascript:void(0);" class="btn" data-toggle="modal" data-target="#myModal" (click)="listAvailableItems()">
+        <i class="fa fa-plus" aria-hidden="true"></i> ADD ITEM</a>
+    </span>
+  </div>
+  <div class="list-group col-xs-9">
+    <button (click)="backToLists()" class="btn btn-primary btn-sm">Back</button>
+  </div>
 </div>
 
-<!-- Modal -->
+<!-- Confirmation -->
+<div id="modal-remove" class="modal fade" role="dialog">
+  <div class="modal-dialog">
+
+    <!-- Modal content-->
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title">Remove Item</h4>
+      </div>
+      <div class="modal-body">
+        <p>Are you sure?</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal" (click)="removeItemFromList()">Yes</button>
+        <button type="button" class="btn btn-default" data-dismiss="modal">No</button>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- Items -->
 <div id="myModal" class="modal fade" role="dialog">
   <div class="modal-dialog">
 
@@ -40,13 +71,21 @@
     <div class="modal-content">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal">&times;</button>
-        <h4 class="modal-title">Modal Header</h4>
+        <h4 class="modal-title">Select one or more items</h4>
       </div>
       <div class="modal-body">
-        <p>Some text in the modal.</p>
+          <div class="checkbox" *ngFor="let item of availableItems">
+            <label>
+              <input type="checkbox" [(ngModel)]="item.selected">{{ item.name }}
+            </label>
+          </div>
+
+          <div *ngIf="availableItems == null">
+              <p>No items left...</p>
+          </div>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-default" data-dismiss="modal" (click)="addItemsToList()">Select</button>
       </div>
     </div>
 

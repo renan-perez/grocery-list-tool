@@ -12,6 +12,7 @@ import 'rxjs/add/operator/map';
 export class ItemService {
 
   private listItemsURL = `http://localhost:8081/grocerylist-core/items/getAllItems`;
+  private listAvailableItemsURL = `http://localhost:8081/grocerylist-core/items/listAvailableItems`;
   private getItemByIdURL = `http://localhost:8081/grocerylist-core/items/getItemDetails`;
   private updateItemsURL = `http://localhost:8081/grocerylist-core/items/updateItem`;
 
@@ -20,6 +21,14 @@ export class ItemService {
   listItems() {
     return this.http
                .get(this.listItemsURL, { headers: this.getHeaders() })
+               .map(response => <Item[]>response.json())
+               .catch(this.handleError);
+  }
+
+  listAvailableItems(groceryListId: Number) {
+    const url = `${this.listAvailableItemsURL}/${groceryListId}`;
+    return this.http
+               .get(url, { headers: this.getHeaders() })
                .map(response => <Item[]>response.json())
                .catch(this.handleError);
   }
@@ -33,7 +42,6 @@ export class ItemService {
   }
 
   updateItem(item: Item) {
-    console.log(JSON.stringify(item));
     return this.http
                .get(this.updateItemsURL, { 
                  headers: this.getHeadersPost(), 

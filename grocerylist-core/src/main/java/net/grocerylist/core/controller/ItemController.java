@@ -39,6 +39,16 @@ public class ItemController {
 		}
 	}
 	
+	@RequestMapping(value = "/listAvailableItems/{groceryListId}", method = RequestMethod.GET)
+	public List<Item> listAvailableItems(@PathVariable Long groceryListId) {
+		try {
+			return itemBusiness.listAvailableItems(groceryListId);
+		} catch (SystemException e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+	
 	@RequestMapping(value = "/updateItem", method = RequestMethod.POST)
 	public Boolean update(@RequestBody Item item) {
 		try {
@@ -47,6 +57,16 @@ public class ItemController {
 		} catch (SystemException e) {
 			e.printStackTrace();
 			return false;
+		}
+	}
+	
+	@RequestMapping(value = "/saveItem", method = RequestMethod.POST)
+	public Item saveItem(@RequestBody Item item) {
+		try {
+			return itemBusiness.save(item);
+		} catch (SystemException e) {
+			e.printStackTrace();
+			return null;
 		}
 	}
 	

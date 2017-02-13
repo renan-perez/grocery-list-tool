@@ -11,6 +11,8 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 
 import net.grocerylist.core.exception.SystemException;
+
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -27,9 +29,12 @@ public class GenericDAO<T, ID extends Serializable> {
         return instance;
     }
     
+    @Transactional
     protected void saveAll(final Collection<T> AllInstances) throws SystemException {
-    	AllInstances.forEach(manager::persist);
-        manager.flush();
+    	AllInstances.forEach(instance -> {
+    		manager.persist(instance);
+        	manager.flush();
+    	});
     }
     
     @Transactional
@@ -38,9 +43,10 @@ public class GenericDAO<T, ID extends Serializable> {
     	manager.flush();
     	return t;
     }
-
-    protected void delete(T instance) throws SystemException {
-        manager.remove(instance);
+    
+    @Transactional
+    protected void delete(final Class<T> clazz, final ID id) throws SystemException {
+        manager.remove(this.get(clazz, id));
         manager.flush();
     }
     
@@ -77,9 +83,11 @@ public class GenericDAO<T, ID extends Serializable> {
 		}
     }
     
+    @Modifying
+	@Transactional
     protected void executeNamedQuery(final String namedQuery,
                                 final Map<String, Object> paramValueMap, final Class<T> clazz) throws SystemException {
-    	createQuery(namedQuery, paramValueMap, clazz).setMaxResults(1).getSingleResult();
+    	createQuery(namedQuery, paramValueMap, clazz).executeUpdate();
     }
 
     private Query createQuery(final String namedQuery, final Map<String, Object> paramValueMap, final Class<T> clazz) {
