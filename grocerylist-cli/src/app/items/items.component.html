@@ -4,8 +4,10 @@
 
     <div class="list-group col-xs-13">
       <div  *ngFor="let item of items" class="list-group-item">
-        <span class="col-xs-10">{{ item?.name }}</span>
-        <a (click)="detailItem(item)" class="btn fa fa-eye"></a>
+        <span>{{ item?.name }}</span>
+        <span class="pull-right">
+          <a (click)="detailItem(item)" class="btn fa fa-eye "></a>
+        </span>
       </div>
     </div>
     <div class="list-group col-xs-13">

@@ -63,7 +63,6 @@ export class GroceryListComponent implements OnInit {
     this.selectedItemIdToRemove = selectedItemId;
   }
 
-
   removeItemFromList() {
     this.groceryListService.removeItemFromList(this.selectedItemIdToRemove)
         .subscribe(
@@ -114,13 +113,13 @@ export class GroceryListComponent implements OnInit {
         );
   }
 
-    updatePurchaseStatus(selectedItem: SelectedItem) {
-      selectedItem.purchase = !selectedItem.purchase;
-      this.groceryListService.updatePurchaseStatus(selectedItem)
-        .subscribe(
-          (success: Boolean) => success ? selectedItem.purchase = selectedItem.purchase : !selectedItem.purchase,
-          err => selectedItem.purchase = !selectedItem.purchase
-        );
+  updatePurchaseStatus(selectedItem: SelectedItem) {
+    selectedItem.purchase = !selectedItem.purchase;
+    this.groceryListService.updatePurchaseStatus(selectedItem)
+      .subscribe(
+        (success: Boolean) => success ? selectedItem.purchase = selectedItem.purchase : !selectedItem.purchase,
+        err => selectedItem.purchase = !selectedItem.purchase
+      );
     }
 
     newGroceryList() {

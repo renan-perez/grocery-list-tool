@@ -3,11 +3,13 @@
     <h4>LISTS</h4>
     <div class="list-group col-xs-13">
       <div  *ngFor="let list of groceryLists" class="list-group-item">
-        <span class="col-xs-9">{{ list.name }}</span>
-        <a (click)="detailGroceryList(list.id)" class="btn fa fa-eye"></a>
-        <a href="javascript:void(0);" class="btn fa fa-times" 
-            data-toggle="modal" data-target="#modal-remove-list" 
-            (click)="selectGroceryListToRemove(list)"></a>
+        <span>{{ list.name }}</span>
+        <span class="pull-right">
+          <a (click)="detailGroceryList(list.id)" class="btn fa fa-eye"></a>
+          <a href="javascript:void(0);" class="btn fa fa-times" 
+              data-toggle="modal" data-target="#modal-remove-list" 
+              (click)="selectGroceryListToRemove(list)"></a>
+        </span>
       </div>
     </div>
     <div class="list-group col-xs-12">
@@ -29,17 +31,20 @@
         </div>
       </div>
       <div *ngFor="let selectedItem of groceryListDetailed.selectedItems" class="list-group-item" [class.list-group-item-warning]="selectedItem.purchase == true">
-        <div class="checkbox col-xs-9">
+        <div class="checkbox">
           <label>
             <input type="checkbox" [(ngModel)]="selectedItem.purchase" (click)="updatePurchaseStatus(selectedItem)">
             {{ selectedItem.id.item.name }}
           </label>
-        </div>
+          <div class="pull-right">
         <a routerLink="/items/{{ selectedItem.id.item.id }}/{{ selectedItem.id.groceryList.id }}" 
             class="btn fa fa-eye" skipLocationChange></a>
         <a href="javascript:void(0);" class="btn fa fa-times" 
             data-toggle="modal" data-target="#modal-remove" 
             (click)="selectItemToRemove(selectedItem.id)"></a>
+        </div>
+        </div>
+        
       </div>
       <span class="list-group-item">
         <a href="javascript:void(0);" class="btn" data-toggle="modal" data-target="#myModal" (click)="listAvailableItems()">
