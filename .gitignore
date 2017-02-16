@@ -4,7 +4,11 @@ RemoteSystemsTempFiles
 Servers
 
 grocerylist-core/.settings
-grocerylist-core/target
+grocerylist-core/target/generated-sources/
+grocerylist-core/target/grocerylist-core/
+grocerylist-core/target/m2e-wtp/
+grocerylist-core/target/maven-archiver/
+grocerylist-core/target/maven-status/
 grocerylist-core/.classpath
 grocerylist-core/.project
 grocerylist-core/src/test
